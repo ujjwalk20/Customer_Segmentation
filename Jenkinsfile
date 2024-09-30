@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image using Docker plugin// 
-                    dockerImage = docker.build("my_ml_app")
+                    dockerImage = docker.build(customer_segmentation_app")
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
                     
                     // Run the new container using Docker plugin 
                     // add -d to run in detached mode
-                    docker.image("my_ml_app").run('-p 8501:8501')
+                    docker.image("customer_segmentation_app").run('-p 8501:8501')
                 }
             }
         }
