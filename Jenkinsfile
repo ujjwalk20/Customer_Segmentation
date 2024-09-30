@@ -11,8 +11,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using Docker plugin// 
-                    dockerImage = docker.build(customer_segmentation_app")
+                    // Build the Docker image using Docker plugin
+                    dockerImage = docker.build("customer_segmentation_app")
                 }
             }
         }
