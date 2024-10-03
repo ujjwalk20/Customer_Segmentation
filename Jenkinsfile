@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     // Capture and print the service URL
-                    def serviceUrl = sh(script: 'minikube service streamlit-service --url', returnStdout: true).trim()
+                    def serviceUrl = bat(script: 'minikube service streamlit-service --url', returnStdout: true).trim()
                     echo "Minikube Service URL: ${serviceUrl}"
                 }
             }
