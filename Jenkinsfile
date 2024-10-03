@@ -1,4 +1,11 @@
 pipeline {
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')  // Docker Hub credentials stored in Jenkins
+        DOCKER_IMAGE = "ujjwalk20/test_minkube_app"
+        DOCKER_TAG = "latest"
+        REPO_URL = "https://github.com/ujjwalk20/Customer_Segmentation.git"
+    }
+
     agent any
 
     stages {
@@ -12,19 +19,39 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image using Docker plugin
-                    dockerImage = docker.build("customer_segmentation_app")
+                    def dockerImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                 }
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
+                    // Use credentials for Docker Hub login
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            // Push the Docker image to Docker Hub
+                            docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes via Minikube') {
+            steps {
+                script {
+                    kubernetesDeploy(
+                        configs: 'streamlit-deployment.yaml',  // Deployment YAML file for Kubernetes
+                        kubeconfigId: 'minikube-kubeconfig',    // Jenkins kubeconfig ID for accessing Minikube
+                        enableConfigSubstitution: true
+                    )
                     
-                    
-                    // Run the new container using Docker plugin 
-                    // add -d to run in detached mode
-                    docker.image("customer_segmentation_app").run('-p 8501:8501')
+                    kubernetesDeploy(
+                        configs: 'streamlit-service.yaml',  // Service YAML file for Kubernetes
+                        kubeconfigId: 'minikube-kubeconfig',
+                        enableConfigSubstitution: true
+                    )
                 }
             }
         }
