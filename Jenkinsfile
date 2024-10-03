@@ -4,6 +4,8 @@ pipeline {
         DOCKER_IMAGE = "ujjwalk20/cust_seg_app"
         DOCKER_TAG = "latest"
         REPO_URL = "https://github.com/ujjwalk20/Customer_Segmentation.git"
+        MINIKUBE_PATH = "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe"  // Use the absolute path of Minikube
+
     }
 
     agent any
@@ -59,7 +61,7 @@ pipeline {
             steps {
                 script {
                     // Capture and print the service URL
-                    def serviceUrl = bat(script: 'minikube service streamlit-service --url', returnStdout: true).trim()
+                    def minikubeServiceUrl = bat(script: "${env.MINIKUBE_PATH} service streamlit-service --url", returnStdout: true).trim()
                     echo "Minikube Service URL: ${serviceUrl}"
                 }
             }
