@@ -4,7 +4,7 @@ pipeline {
         DOCKER_IMAGE = "ujjwalk20/cust_seg_app"
         DOCKER_TAG = "latest"
         REPO_URL = "https://github.com/ujjwalk20/Customer_Segmentation.git"
-        MINIKUBE_PATH = "C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe"  // Use the absolute path of Minikube
+        MINIKUBE_PATH ="\"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe\""  // Use the absolute path of Minikube
 
     }
 
