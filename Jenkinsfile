@@ -16,6 +16,22 @@ pipeline {
                 checkout scm
             }
         }
+        
+//         stage('Run Pytest') {
+//     steps {
+//         script {
+//             try {
+//                  echo 'running unittest'
+//                 bat '"C:\\Users\\ujjwa\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" test_firstapp_unittest.py'
+               
+//             } catch (Exception e) {
+//                 echo "Tests failed: ${e.message}"
+//                 // Optionally: Mark the build as unstable or perform other actions
+//             }
+//         }
+//     }
+// }
+
 
         stage('Build Docker Image') {
             steps {
