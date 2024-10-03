@@ -63,6 +63,6 @@ pipeline {
                     echo "Minikube Service URL: ${serviceUrl}"
                 }
             }
-        
+          }
     }
 }
