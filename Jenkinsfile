@@ -58,28 +58,42 @@ pipeline {
         stage('Deploy to Kubernetes via Minikube') {
             steps {
                 script {
-                    kubernetesDeploy(
-                        configs: 'streamlit-deployment.yaml',  // Deployment YAML file for Kubernetes
-                        kubeconfigId: 'minikube-kubeconfig',    // Jenkins kubeconfig ID for accessing Minikube
-                        enableConfigSubstitution: true
-                    )
-                    
-                    kubernetesDeploy(
-                        configs: 'streamlit-service.yaml',  // Service YAML file for Kubernetes
-                        kubeconfigId: 'minikube-kubeconfig',
-                        enableConfigSubstitution: true
-                    )
+                    // Deploy using kubectl commands instead of kubernetesDeploy plugin
+                    bat "${KUBECTL_PATH} apply -f streamlit-deployment.yaml --kubeconfig=%USERPROFILE%\\.kube\\config"
+                    bat "${KUBECTL_PATH} apply -f streamlit-service.yaml --kubeconfig=%USERPROFILE%\\.kube\\config"
                 }
             }
         }
-          // stage('Get Minikube Service URL') {
-          //   steps {
-          //       script {
-          //           // Capture and print the service URL
-          //           def minikubeServiceUrl = bat(script: "${env.MINIKUBE_PATH} service streamlit-service --url", returnStdout: true).trim()
-          //           echo "Minikube Service URL: ${serviceUrl}"
-          //       }
-          //   }
-          // }
+        // stage('Deploy to Kubernetes via Minikube') {
+        //     steps {
+        //         script {
+        //             kubernetesDeploy(
+        //                 configs: 'streamlit-deployment.yaml',  // Deployment YAML file for Kubernetes
+        //                 kubeconfigId: 'minikube-kubeconfig',    // Jenkins kubeconfig ID for accessing Minikube
+        //                 enableConfigSubstitution: true
+        //             )
+                    
+        //             kubernetesDeploy(
+        //                 configs: 'streamlit-service.yaml',  // Service YAML file for Kubernetes
+        //                 kubeconfigId: 'minikube-kubeconfig',
+        //                 enableConfigSubstitution: true
+        //             )
+        //         }
+        //     }
+        // }
+
+        // Uncomment if you want to capture and print the Minikube service URL
+        // stage('Get Minikube Service URL') {
+        //     steps {
+        //         script {
+        //             def minikubeServiceUrl = bat(script: "${MINIKUBE_PATH} service streamlit-service --url", returnStdout: true).trim()
+        //             echo "Minikube Service URL: ${minikubeServiceUrl}"
+        //         }
+        //     }
+        // }
+
+
+        
     }
 }
+  
