@@ -50,19 +50,8 @@ pipeline {
                 }
             }
         }
-      stage('Debugging') {
-            steps {
-                script {
-                    echo "Current Directory:"
-                    bat 'cd'
-                    echo "Kubectl Path: ${KUBECTL_PATH}"
-                    echo "Kubeconfig Path: ${KUBECONFIG_PATH}"
-                }
-            }
-        }
-
+    
       
-
        stage('Deploy to Kubernetes via Minikube') {
             steps {
                 script {
