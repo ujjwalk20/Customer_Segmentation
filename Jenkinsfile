@@ -72,14 +72,14 @@ pipeline {
             }
        }
 
-        // Optional: Get Minikube Service URL
-        // stage('Get Minikube Service URL') {
-        //     steps {
-        //         script {
-        //             def minikubeServiceUrl = bat(script: "${env.MINIKUBE_PATH} service streamlit-service --url", returnStdout: true).trim()
-        //             echo "Minikube Service URL: ${minikubeServiceUrl}"
-        //         }
-        //     }
-        // }
+        Optional: Get Minikube Service URL
+        stage('Get Minikube Service URL') {
+            steps {
+                script {
+                    def minikubeServiceUrl = bat(script: "${env.MINIKUBE_PATH} service streamlit-service --url", returnStdout: true).trim()
+                    echo "Minikube Service URL: ${minikubeServiceUrl}"
+                }
+            }
+        }
     }
 }
