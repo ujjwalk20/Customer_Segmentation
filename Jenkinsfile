@@ -70,6 +70,7 @@ pipeline {
                     bat "${KUBECTL_PATH} apply -f streamlit-service.yaml --kubeconfig=${KUBECONFIG_PATH}"
                 }
             }
+       }
 
         // Optional: Get Minikube Service URL
         // stage('Get Minikube Service URL') {
