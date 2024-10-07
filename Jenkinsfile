@@ -61,6 +61,15 @@ pipeline {
             }
         }
 
+        stage('Start Minikube') {
+            steps {
+                script {
+                    // Start Minikube if not already running
+                    bat "${MINIKUBE_PATH} start --driver=hyperv"
+                }
+            }
+        }
+
        stage('Deploy to Kubernetes via Minikube') {
             steps {
                 script {
@@ -72,12 +81,10 @@ pipeline {
             }
        }
 
-        // Optional: Get Minikube Service URL
-        stage('Get Minikube Service URL') {
+stage('Get Minikube Service URL') {
             steps {
                 script {
-                    def minikubeServiceUrl = bat(script: "${env.MINIKUBE_PATH} service streamlit-service --url", returnStdout: true).trim()
-                    echo "Minikube Service URL: ${minikubeServiceUrl}"
+                    bat "${MINIKUBE_PATH} service streamlit-service --url"
                 }
             }
         }
