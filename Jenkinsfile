@@ -6,6 +6,7 @@ pipeline {
         REPO_URL = "https://github.com/ujjwalk20/Customer_Segmentation.git"
         MINIKUBE_PATH = "\"C:\\Program Files\\Kubernetes\\Minikube\\minikube.exe\""  // Absolute path of Minikube
         KUBECTL_PATH = "\"C:\\Program Files\\Kubernetes\\Minikube\\kubectl.exe\""  // Absolute path of kubectl
+        KUBECONFIG_PATH = "\"C:\\Users\\ujjwa\\.kube\\config\""
     }
 
     agent any
@@ -49,16 +50,26 @@ pipeline {
         //         }
         //     }
         // }
-
-        stage('Deploy to Kubernetes via Minikube') {
+      stage('Debugging') {
             steps {
                 script {
-                    // Accessing the environment variable with ${env.KUBECTL_PATH}
-                    bat "${env.KUBECTL_PATH} apply -f streamlit-deployment.yaml --kubeconfig=%USERPROFILE%\\.kube\\config"
-                    bat "${env.KUBECTL_PATH} apply -f streamlit-service.yaml --kubeconfig=%USERPROFILE%\\.kube\\config"
+                    echo "Current Directory:"
+                    bat 'cd'
+                    echo "Kubectl Path: ${KUBECTL_PATH}"
+                    echo "Kubeconfig Path: ${KUBECONFIG_PATH}"
                 }
             }
         }
+
+       stage('Deploy to Kubernetes via Minikube') {
+            steps {
+                script {
+                    // Apply the deployment YAML
+                    bat "${KUBECTL_PATH} apply -f streamlit-deployment.yaml --kubeconfig=${KUBECONFIG_PATH}"
+                    // Apply the service YAML
+                    bat "${KUBECTL_PATH} apply -f streamlit-service.yaml --kubeconfig=${KUBECONFIG_PATH}"
+                }
+            }
 
         // Optional: Get Minikube Service URL
         // stage('Get Minikube Service URL') {
