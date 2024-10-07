@@ -72,7 +72,7 @@ pipeline {
             }
        }
 
-        Optional: Get Minikube Service URL
+        // Optional: Get Minikube Service URL
         stage('Get Minikube Service URL') {
             steps {
                 script {
