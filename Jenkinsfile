@@ -18,38 +18,38 @@ pipeline {
             }
         }
 
-        // stage('Pytest') {
-        //     steps {
-        //         script {
-        //             try {
-        //                 echo 'running unittest'
-        //                 bat '"C:\\Users\\ujjwa\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" test_all.py'
-        //             } catch (Exception e) {
-        //                 echo "Tests failed: ${e.message}"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Pytest') {
+            steps {
+                script {
+                    try {
+                        echo 'running unittest'
+                        bat '"C:\\Users\\ujjwa\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" test_all.py'
+                    } catch (Exception e) {
+                        echo "Tests failed: ${e.message}"
+                    }
+                }
+            }
+        }
 
-        // stage('Build Docker Image') {
-        //     steps {
-        //         script {
-        //             def dockerImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-        //         }
-        //     }
-        // }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                }
+            }
+        }
 
-        // stage('Push Docker Image to Docker Hub') {
-        //     steps {
-        //         script {
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        //                 docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-        //                     docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                        }
+                    }
+                }
+            }
+        }
       stage('Debugging') {
             steps {
                 script {
@@ -61,14 +61,7 @@ pipeline {
             }
         }
 
-        stage('Start Minikube') {
-            steps {
-                script {
-                    // Start Minikube if not already running
-                    bat "${MINIKUBE_PATH} start --driver=hyperv"
-                }
-            }
-        }
+      
 
        stage('Deploy to Kubernetes via Minikube') {
             steps {
@@ -81,12 +74,12 @@ pipeline {
             }
        }
 
-stage('Get Minikube Service URL') {
-            steps {
-                script {
-                    bat "${MINIKUBE_PATH} service streamlit-service --url"
-                }
-            }
-        }
+// stage('Get Minikube Service URL') {
+//             steps {
+//                 script {
+//                     bat "${MINIKUBE_PATH} service streamlit-service --url"
+//                 }
+//             }
+//         }
     }
 }
